@@ -3,7 +3,7 @@ import { CustomerModel } from "../models/customerModel.js";
 export const CustomerController = {
   async getAll(req, res) {
   try {
-    const { name, page, limit } = req.query;
+    const { name, page, limit } = req.body;
     const customers = await CustomerModel.getAll(name, page, limit);
     res.json(customers);
     } catch (err) {
