@@ -1,25 +1,25 @@
 import { CustomerModel } from "../models/customerModel.js";
 
-// Helper function untuk validasi input
+// Helper fungsi validasi (menggunakan throw Error)
 const validateCustomerInput = (data) => {
   if (!data.email || !data.email.includes("@")) {
-    return "Email wajib memiliki karakter @";
+    throw new Error("Email wajib memiliki karakter @");
   }
   if (!data.phone || data.phone.length < 10) {
-    return "Phone (nomor telepon) harus diisi minimal 10 karakter";
+    throw new Error("Phone (nomor telepon) harus diisi minimal 10 karakter");
   }
-  return null;
 };
 
 export const CustomerController = {
   async getAll(req, res) {
-  try {
-    const { name, page, limit } = req.body;
-    const customers = await CustomerModel.getAll(name, page, limit);
-    res.json(customers);
+    try {
+      // Mengambil parameter dari req.query (GET URL params)
+      const { name, page, limit } = req.query;
+      const customers = await CustomerModel.getAll(name, page, limit);
+      res.json(customers);
     } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+      res.status(500).json({ error: err.message });
+    }
   },
 
   async getById(req, res) {
@@ -33,14 +33,14 @@ export const CustomerController = {
 
   async create(req, res) {
     try {
-      // 1. Jalankan validasi terlebih dahulu
-      validateCustomerData(req.body);
+      // 1. Panggil helper fungsi yang sesuai
+      validateCustomerInput(req.body);
 
-      // 2. Jika lolos validasi, baru simpan ke database
+      // 2. Simpan ke database jika lolos validasi
       const customer = await CustomerModel.create(req.body);
       res.status(201).json(customer);
     } catch (err) {
-      // 3. Jika gagal validasi, tangkap di sini dan beri status 400
+      // 3. Tangkap error validasi (status 400)
       res.status(400).json({ error: err.message });
     }
   },
@@ -48,8 +48,11 @@ export const CustomerController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      validateCustomerData(req.body);
+      
+      // 1. Panggil helper fungsi yang sesuai
+      validateCustomerInput(req.body);
 
+      // 2. Update database jika lolos validasi
       const customer = await CustomerModel.update(id, req.body);
       res.json(customer);
     } catch (err) {
