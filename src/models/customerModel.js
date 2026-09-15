@@ -1,5 +1,4 @@
 import { supabase } from "../config/supabaseClient.js";
-import { supabase } from "../config/supabase.js";
 
 export const CustomerModel = {
   async getAll(name, page, limit) {
