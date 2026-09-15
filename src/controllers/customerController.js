@@ -31,35 +31,29 @@ export const CustomerController = {
     }
   },
 
-  // Tambah Customer
   async create(req, res) {
     try {
-      const validationError = validateCustomerInput(req.body);
-      if (validationError) {
-        return res.status(400).json({ error: validationError });
-      }
+      // 1. Jalankan validasi terlebih dahulu
+      validateCustomerData(req.body);
 
+      // 2. Jika lolos validasi, baru simpan ke database
       const customer = await CustomerModel.create(req.body);
       res.status(201).json(customer);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      // 3. Jika gagal validasi, tangkap di sini dan beri status 400
+      res.status(400).json({ error: err.message });
     }
   },
 
-  // Update Customer
   async update(req, res) {
     try {
       const { id } = req.params;
-
-      const validationError = validateCustomerInput(req.body);
-      if (validationError) {
-        return res.status(400).json({ error: validationError });
-      }
+      validateCustomerData(req.body);
 
       const customer = await CustomerModel.update(id, req.body);
       res.json(customer);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(400).json({ error: err.message });
     }
   },
 
