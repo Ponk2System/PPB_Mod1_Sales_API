@@ -44,6 +44,7 @@ export const CustomerController = {
       // 3. Tangkap error validasi (status 400)
       res.status(400).json({ error: err.message });
     }
+    return res.status(400).json({ debug: "KODE BARU SUDAH AKTIF" });
   },
 
   async update(req, res) {
