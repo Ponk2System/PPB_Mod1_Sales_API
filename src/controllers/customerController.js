@@ -33,6 +33,7 @@ export const CustomerController = {
 
   async create(req, res) {
     try {
+      console.log("Memulai validasi input ...");
       // 1. Panggil helper fungsi yang sesuai
       validateCustomerInput(req.body);
 
