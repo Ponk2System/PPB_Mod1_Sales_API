@@ -1,13 +1,21 @@
 import { supabase } from "../config/supabaseClient.js";
+import { supabase } from "../config/supabase.js";
 
 export const CustomerModel = {
   async getAll(name, page, limit) {
   let query = supabase.from("customers").select("*");
 
+  // Soal 1, searching 
   if (name) query = query.ilike("name", `%${name}%`);
+
+  // Soal 2, pagination
   if (page && limit) {
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+
+    const from = (pageNum - 1) * limitNum;
+    const to = from + limitNum - 1;
+
     query = query.range(from, to);
   }
 
