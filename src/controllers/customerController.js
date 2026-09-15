@@ -20,21 +20,35 @@ export const CustomerController = {
     }
   },
 
+  // Tambah Customer
   async create(req, res) {
     try {
+      const validationError = validateCustomerInput(req.body);
+      if (validationError) {
+        return res.status(400).json({ error: validationError });
+      }
+
       const customer = await CustomerModel.create(req.body);
       res.status(201).json(customer);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   },
 
+  // Update Customer
   async update(req, res) {
     try {
-      const customer = await CustomerModel.update(req.params.id, req.body);
+      const { id } = req.params;
+
+      const validationError = validateCustomerInput(req.body);
+      if (validationError) {
+        return res.status(400).json({ error: validationError });
+      }
+
+      const customer = await CustomerModel.update(id, req.body);
       res.json(customer);
     } catch (err) {
-      res.status(400).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   },
 
