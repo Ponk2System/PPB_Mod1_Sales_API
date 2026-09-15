@@ -2,12 +2,13 @@ import { CustomerModel } from "../models/customerModel.js";
 
 export const CustomerController = {
   async getAll(req, res) {
-    try {
-      const customers = await CustomerModel.getAll();
-      res.json(customers);
+  try {
+    const { name, page, limit } = req.query;
+    const customers = await CustomerModel.getAll(name, page, limit);
+    res.json(customers);
     } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
+    res.status(500).json({ error: err.message });
+  }
   },
 
   async getById(req, res) {
