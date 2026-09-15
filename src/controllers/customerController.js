@@ -1,5 +1,16 @@
 import { CustomerModel } from "../models/customerModel.js";
 
+// Helper function untuk validasi input
+const validateCustomerInput = (data) => {
+  if (!data.email || !data.email.includes("@")) {
+    return "Email wajib memiliki karakter @";
+  }
+  if (!data.phone || data.phone.length < 10) {
+    return "Phone (nomor telepon) harus diisi minimal 10 karakter";
+  }
+  return null;
+};
+
 export const CustomerController = {
   async getAll(req, res) {
   try {
